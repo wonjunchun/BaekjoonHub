@@ -19,7 +19,7 @@ public class Main {
 		
 		//맵 입력 받음
 		Deque<int[]> spreadQueue = new ArrayDeque<>(); //물 확산 큐
-		Deque<Object[]> moveQueue = new ArrayDeque<>(); //고슴도치 이동 큐
+		Deque<int[]> moveQueue = new ArrayDeque<>(); //고슴도치 이동 큐
 		
 		map = new String[R][C];
 		visited = new boolean[R][C]; //고슴도치 이동 경로
@@ -34,7 +34,7 @@ public class Main {
 				else if(map[r][c].equals("S")) {
 					//이동 큐 명세 {hour, r, c, visited}
 					visited[r][c] = true;
-					moveQueue.add(new Object[] {0, r, c, visited});
+					moveQueue.add(new int[] {0, r, c});
 				}
 			}
 		}
@@ -61,27 +61,25 @@ public class Main {
 			}
 			while(!moveQueue.isEmpty()) {
 				//해당되는 시간이 아니면 돌지 않음
-				if(((int)moveQueue.peekFirst()[0]) != hour) break;
-				Object[] current = moveQueue.pollFirst();
+				if(moveQueue.peekFirst()[0] != hour) break;
+				int[] current = moveQueue.pollFirst();
 				int currentHour = (int)current[0];
 				int currentR = (int)current[1];
 				int currentC = (int)current[2];
-				boolean[][] curVisited = (boolean[][]) current[3];
 				
 				for(int[] d: directions) {
 					int nextR = currentR+d[0];
 					int nextC = currentC+d[1];
 					//좌표가 범위를 벗어나거나 이미 방문했던 곳이거나 빈칸이 아니라면 이동 불가
-					if(nextR < 0 || nextR >= R || nextC < 0 || nextC >= C || !(map[nextR][nextC].equals(".") || map[nextR][nextC].equals("D")) || curVisited[nextR][nextC] || visited[nextR][nextC]) continue;
+					if(nextR < 0 || nextR >= R || nextC < 0 || nextC >= C || !(map[nextR][nextC].equals(".") || map[nextR][nextC].equals("D")) || visited[nextR][nextC]) continue;
 					if(map[nextR][nextC].equals("D")) { //도착 지점이라면 탐색 종료
 						isEscaped = true;
 						hour++;
 						break A;
 					}
-					boolean[][] nextVisited = copyVisited(curVisited);
-//					nextVisited[nextR][nextC] = true; //방문 체크
+					
 					visited[nextR][nextC] = true;
-					moveQueue.add(new Object[] {currentHour+1, nextR, nextC, nextVisited});
+					moveQueue.add(new int[] {currentHour+1, nextR, nextC});
 				}
 				
 			}
