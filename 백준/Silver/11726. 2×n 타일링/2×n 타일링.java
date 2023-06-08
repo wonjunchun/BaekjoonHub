@@ -19,16 +19,16 @@ public class Main {
      */
     public static void main(String[] args){
         Scanner sc = new Scanner(System.in);
-        BigInteger[] dp = new BigInteger[1001]; //0~1000. 경우의 수 저장
+        int n = sc.nextInt(); //입력값
+        BigInteger[] dp = new BigInteger[n+1]; //0~1000. 경우의 수 저장
         dp[0] = new BigInteger("1");
         dp[1] = new BigInteger("1");
-        dp[2] = new BigInteger("2");
-        //f(n) = f(n-1) + 2f(n-2)
-        for(int i = 3; i <= 1000; i++){
+
+        //f(n) = f(n-1) + f(n-2)
+        for(int i = 2; i <= n; i++){
             //dp[i] = dp[i-1] + dp[i-2];
             dp[i] = dp[i-1].add(dp[i-2]);
         }
-        int n = sc.nextInt(); //입력값
         System.out.println(dp[n].mod(new BigInteger("10007")).toString());
     }
 }
