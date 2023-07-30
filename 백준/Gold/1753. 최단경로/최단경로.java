@@ -41,10 +41,6 @@ public class Main {
             graph[u].add(new Graph(v, w));
         }
 
-        for(int v = 1; v <= V; v++){
-            graph[v].sort(Comparator.naturalOrder());
-        }
-
         int[] answer = dijkstra();
 
         StringBuilder sb = new StringBuilder();
