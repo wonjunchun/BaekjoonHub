@@ -20,6 +20,7 @@ public class Main {
         constructTime = new int[N + 1];
         degree = new int[N + 1];
         result = new int[N + 1];
+        visited = new boolean[N + 1];
         for(int n = 1; n <= N; n++){
             adjList[n] = new LinkedList<>();
         }
@@ -42,10 +43,12 @@ public class Main {
         while(!queue.isEmpty()){
             int current = queue.pollFirst();
             for(int next: adjList[current]){ //현재 건물의 다음 원소들
+                if(visited[next]) continue;
                 //이전 건물중 가장 오래 걸리는 건물 시간 + next 시간
                 result[next] = Math.max(result[next], result[current] + constructTime[next]);
                 if(--degree[next] == 0){ //진입차수 0이 됐다면
                     queue.add(next);
+                    visited[next] = true;
                 }
             }
         }
