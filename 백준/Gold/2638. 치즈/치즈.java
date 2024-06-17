@@ -19,6 +19,7 @@ public class Main {
     static boolean[][] visited;
     static int[][] directions = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
     static List<Cheese> cheeseList;
+    static int cheeseCnt = 0;
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
@@ -29,6 +30,7 @@ public class Main {
             st = new StringTokenizer(br.readLine());
             for(int m = 0; m < M; m++){
                 map[n][m] = Integer.parseInt(st.nextToken());
+                if(map[n][m] == 1) cheeseCnt++;
             }
         }
         int time = 0;
@@ -37,7 +39,7 @@ public class Main {
             cheeseList = new LinkedList<>(); //이번에 녹는 치즈 목록
             visited = new boolean[N][M];
             outsideAir(0, 0); //바깥공기 dfs로 마킹
-            
+
             for(int n = 0; n < N; n++){
                 for(int m = 0; m < M; m++){
                     if(map[n][m] == 1 && melt(n, m) >= 2){
@@ -47,15 +49,9 @@ public class Main {
             }
             for(Cheese cheese: cheeseList){
                 map[cheese.row][cheese.col] = 2; //치즈 녹이고 공기 됨
+                cheeseCnt--;
             }
-            
-            boolean isAllMelted = true;
-            for(int n = 0; n < N; n++){
-                for(int m = 0; m < M; m++){
-                    if(map[n][m] == 1) isAllMelted = false;
-                }
-            }
-            if(isAllMelted) break;
+            if(cheeseCnt <= 0) break;
         }
         System.out.println(time);
     }
